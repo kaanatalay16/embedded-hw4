@@ -1,0 +1,10 @@
+import os.path as osp
+import numpy as np
+from sklearn2c import BayesClassifier
+
+test_samples = np.load(osp.join("classification_data","cls_test_samples.npy"))
+test_labels = np.load(osp.join("classification_data","cls_test_labels.npy"))
+
+bayes_classifier = BayesClassifier.load(osp.join("classification_models", "bayes_classifier.joblib"))
+likelihood = bayes_classifier.predict(test_samples)
+print(likelihood)

@@ -1,0 +1,21 @@
+# Data and models
+data/
+models/
+.rules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# LaTeX build outputs
+report/*.aux
+report/*.log
+report/*.out
+report/*.pdf
+report/*.toc
+
+# OS files
+.DS_Store
+

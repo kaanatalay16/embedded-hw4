@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{EE 4065 -- Embedded Digital Image Processing\\Homework 4 Report}
+\author{Kaan Atalay (ID: 150720057)}
+\date{December 26, 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Overview}
+This report presents two handwritten digit recognition applications following Sections 10.9 and 11.8 of the course textbook. The MNIST offline dataset is used for training and evaluation. Both models are lightweight and suitable as baselines for microcontroller deployment.
+
+\section{Dataset}
+\begin{itemize}
+    \item \textbf{Source}: MNIST IDX files placed under \texttt{data/MNIST-dataset/}.
+    \item \textbf{Preprocessing}: Flatten to 784 features, normalize pixels to \([0,1]\); no augmentation.
+    \item \textbf{Split}: Train 55k / Val 5k (held-out from train set) / Test 10k.
+\end{itemize}
+
+\section{Methodology for Q1 (Section 10.9)}
+\begin{itemize}
+    \item \textbf{Model}: Softmax regression (784 $\rightarrow$ 10) implemented in numpy.
+    \item \textbf{Training}: Cross-entropy via batch gradient descent; 5 epochs; batch size 256; learning rate 0.1; Glorot-like random init.
+    \item \textbf{Export}: Parameters saved to \texttt{models/q1\_softmax.npz}.
+    \item \textbf{Evaluation}: Accuracy on train/val/test.
+\end{itemize}
+
+\section{Methodology for Q2 (Section 11.8)}
+\begin{itemize}
+    \item \textbf{Model}: Single-hidden-layer MLP (784 $\rightarrow$ 128 ReLU $\rightarrow$ 10) in numpy.
+    \item \textbf{Training}: Cross-entropy with batch gradient descent; 5 epochs; batch size 256; learning rate 0.05.
+    \item \textbf{Export}: Parameters saved to \texttt{models/q2\_mlp.npz}.
+    \item \textbf{Evaluation}: Accuracy on train/val/test.
+\end{itemize}
+
+\section{Results}
+\begin{itemize}
+    \item \textbf{Q1 softmax}: Test accuracy 0.9117; validation 0.9256 after 5 epochs.
+    \item \textbf{Q2 MLP}: Test accuracy 0.9163; validation 0.9334 after 5 epochs.
+    \item \textbf{Observation}: The shallow MLP slightly outperforms softmax due to nonlinear hidden layer while remaining lightweight.
+\end{itemize}
+
+\section{Deployment Notes}
+\begin{itemize}
+    \item Target STM32 part number, available flash/RAM (to be specified). Both models are small: Q1 parameters $\approx$ 7.8k floats; Q2 $\approx$ 100k floats.
+    \item Convert weights to fixed-point (e.g., 8-bit) for MCU; map matrix multiplies to CMSIS-NN or TFLite Micro kernels.
+    \item Measure latency on target board or approximate cycles using MAC counts; ensure RAM fits activations (Q2 hidden layer 128 floats).
+\end{itemize}
+
+\section{Conclusion}
+Summarize comparative performance of Q1 and Q2 approaches, discuss trade-offs for embedded deployment, and outline potential improvements (pruning, further quantization, or optimized kernels).
+
+\section*{Repository and Submission}
+\begin{itemize}
+    \item GitHub repository: \textit{(link to be added after push)}.
+    \item Contents: code, models, report PDF, and sample outputs.
+    \item Submission: share repo link via email to the instructor.
+\end{itemize}
+
+\end{document}
+
